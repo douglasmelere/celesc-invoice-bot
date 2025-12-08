@@ -2,6 +2,7 @@ FROM node:20-alpine AS deps
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 COPY pnpm-lock.yaml package.json ./
+COPY patches ./patches
 RUN pnpm fetch
 
 FROM node:20-alpine AS build

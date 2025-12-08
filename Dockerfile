@@ -1,5 +1,4 @@
-FROM node:20-alpine AS deps
-RUN apk add --no-cache libc6-compat
+FROM node:20-bookworm-slim AS deps
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 COPY pnpm-lock.yaml package.json ./
@@ -7,8 +6,7 @@ COPY .npmrc .npmrc
 COPY patches ./patches
 RUN pnpm fetch
 
-FROM node:20-alpine AS build
-RUN apk add --no-cache libc6-compat
+FROM node:20-bookworm-slim AS build
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -17,7 +15,7 @@ ENV NODE_ENV=production
 RUN pnpm install --frozen-lockfile --offline
 RUN pnpm run build
 
-FROM node:20-alpine AS runner
+FROM node:20-bookworm-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /app/dist ./dist

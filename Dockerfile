@@ -1,4 +1,5 @@
 FROM node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 COPY pnpm-lock.yaml package.json ./
@@ -7,6 +8,7 @@ COPY patches ./patches
 RUN pnpm fetch
 
 FROM node:20-alpine AS build
+RUN apk add --no-cache libc6-compat
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules

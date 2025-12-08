@@ -12,7 +12,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
-RUN pnpm install --frozen-lockfile --offline
+RUN pnpm install --frozen-lockfile
 RUN pnpm run build
 
 FROM node:20-bookworm-slim AS runner

@@ -12,7 +12,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
 RUN pnpm install --frozen-lockfile --offline
-RUN pnpm run db:generate && pnpm run db:migrate
 RUN pnpm run build
 
 FROM node:20-alpine AS runner

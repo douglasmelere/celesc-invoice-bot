@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: celesc-invoice-bot-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: celesc_user
+      POSTGRES_PASSWORD: celesc_password
+      POSTGRES_DB: celesc_invoice_bot
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U celesc_user -d celesc_invoice_bot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
